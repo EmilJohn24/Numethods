@@ -1,0 +1,9 @@
+#IntelliJ Workspace (To avoid workspace changes)
+.idea/workspace.xml
+out/*
+*.iml
+
+#Java-related
+*.class
+
+
