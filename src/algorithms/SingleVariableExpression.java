@@ -1,5 +1,6 @@
 package algorithms;
 
+import algorithms.utility.AlgoUtil;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 
@@ -16,23 +17,47 @@ public final class SingleVariableExpression implements DoubleUnaryOperator {
 
     private final Expression expression;
     private final String variable;
+    private final AnswerPrecision precision;
+
+    public static AnswerPrecision NO_PRECISION = new AnswerPrecision(-1);
+    static class AnswerPrecision{
+        private int precision;
+
+        AnswerPrecision(int precision){
+            this.precision = precision;
+        }
+
+        /**
+         * @return Precision
+         */
+        private int getPrecision() {
+            return precision;
+        }
+
+        private boolean hasPrecision(){
+            return precision >= 0;
+        }
+
+    }
 
     /**
      * Creates a variable expression from an expression in String form
      * @param expressionString String form of the expression
      * @param variableString Variable used in the expression
+     * @param precision Result precision
      * @return Single variable expression built
      */
-    public static SingleVariableExpression fromStringExpression(String expressionString, String variableString){
+    public static SingleVariableExpression fromStringExpression(String expressionString, String variableString, AnswerPrecision precision){
         Expression newExpression = new ExpressionBuilder(expressionString)
                 .variable(variableString)
                 .build();
-        return new SingleVariableExpression(newExpression, variableString);
+        return new SingleVariableExpression(newExpression, variableString, precision);
     }
 
-    private SingleVariableExpression(Expression expression, String variable){
+    private SingleVariableExpression(Expression expression, String variable, AnswerPrecision precision){
         this.expression = expression;
         this.variable = variable;
+        this.precision = precision;
     }
 
     /**
@@ -46,8 +71,12 @@ public final class SingleVariableExpression implements DoubleUnaryOperator {
         are possible
          */
         //Plug in variable then evaluate
-        return expression
+        double val =
+                expression
                 .setVariable(variable, operand)
                 .evaluate();
+
+        if (precision.hasPrecision()) val = AlgoUtil.truncate(val, precision.getPrecision());
+        return val;
     }
 }

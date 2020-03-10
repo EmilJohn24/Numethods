@@ -1,5 +1,6 @@
 package algorithms;
 
+import java.util.Collection;
 import java.util.function.DoubleUnaryOperator;
 
 /**
@@ -8,9 +9,7 @@ import java.util.function.DoubleUnaryOperator;
 public interface RootFindingAlgorithm {
     /**
      * @param expression Expression whose root will be found
-     * @return Root of {@code expression}
+     * @return Collection of root-finding iterations
      */
-    double rootOf(DoubleUnaryOperator expression);
-
-
+    Collection<RootFindingIteration> perform(DoubleUnaryOperator expression);
 }

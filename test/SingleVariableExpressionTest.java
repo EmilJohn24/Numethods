@@ -40,7 +40,7 @@ public void testFromStringExpression() throws Exception {
 */ 
 public void testApplyAsDouble() throws Exception { 
 //TODO: Test goes here...
-    SingleVariableExpression expression = SingleVariableExpression.fromStringExpression("x^2+4", "x");
+    SingleVariableExpression expression = SingleVariableExpression.fromStringExpression("x^2+4", "x", SingleVariableExpression.NO_PRECISION);
     assert(expression.applyAsDouble(2.0) == 8.0); //2^2 + 4 == 8
 } 
 
