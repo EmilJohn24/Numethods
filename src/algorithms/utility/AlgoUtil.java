@@ -29,4 +29,8 @@ public final class AlgoUtil {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
+
+    public static double error(double prev, double curr){
+        return Math.abs((prev - curr) / prev);
+    }
 }

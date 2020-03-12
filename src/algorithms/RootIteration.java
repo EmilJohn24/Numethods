@@ -12,7 +12,7 @@ class RootIteration implements Iterable<RootIteration.VariableData> {
     //However, to ensure that information about what variables are allowed is preserved, this must not be allowed to construct itself and should rely on some
     //simpler templating system
 
-    private final HashMap<String, Double> variableValuePair;
+    private final LinkedHashMap<String, Double> variableValuePair;
 
     /**
      * @return Returns an iterator for variable data
@@ -84,7 +84,7 @@ class RootIteration implements Iterable<RootIteration.VariableData> {
          * @return A root iteration based on the template
          */
         RootIteration generate(){
-            HashMap<String, Double> newVariableValuePair = new HashMap<>();
+            LinkedHashMap<String, Double> newVariableValuePair = new LinkedHashMap<>();
             for (String variableString : template){
                 newVariableValuePair.put(variableString, DEFAULT_VALUE);
             }
@@ -133,7 +133,7 @@ class RootIteration implements Iterable<RootIteration.VariableData> {
         return variableValuePair.get(variableString);
     }
 
-    private RootIteration(HashMap<String, Double> variableValuePair){
+    private RootIteration(LinkedHashMap<String, Double> variableValuePair){
         this.variableValuePair = variableValuePair;
     }
 

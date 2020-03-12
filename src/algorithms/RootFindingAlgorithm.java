@@ -9,7 +9,9 @@ import java.util.function.DoubleUnaryOperator;
 public interface RootFindingAlgorithm {
     /**
      * @param expression Expression whose root will be found. This is some function that returns
-     * @return Collection of root-finding iterations
+     * @param maxError Maximum error that will stop iterations
+     * @return Collection of root-finding iteration
      */
-    Collection<RootIteration> perform(DoubleUnaryOperator expression);
+    //NOTE: Return type was changed to a more well-encapsulated root computation class
+    RootComputation perform(DoubleUnaryOperator expression, double maxError);
 }

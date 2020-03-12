@@ -9,7 +9,7 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * Algebraic expression representation example: {@code x^2 + 3x + 4}.
  */
-final class SingleVariableExpression implements DoubleUnaryOperator {
+public final class SingleVariableExpression implements DoubleUnaryOperator {
     //This uses the exp4j expression library for expression evaluation and storage
 
     //The sole purpose of this library is to serve as an intermediary between operations requiring
