@@ -1,8 +1,5 @@
 package algorithms;
 
-import algorithms.utility.AlgoUtil;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.function.DoubleUnaryOperator;
 
@@ -15,7 +12,7 @@ public class BisectionAlgorithm implements RootFindingAlgorithm {
      * @return Result of bisection algorithm
      */
     @Override
-    public Collection<RootFindingIteration> perform(DoubleUnaryOperator expression) {
+    public Collection<RootIteration> perform(DoubleUnaryOperator expression) {
         return null;
     }
 }

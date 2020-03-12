@@ -8,8 +8,8 @@ import java.util.function.DoubleUnaryOperator;
  */
 public interface RootFindingAlgorithm {
     /**
-     * @param expression Expression whose root will be found
+     * @param expression Expression whose root will be found. This is some function that returns
      * @return Collection of root-finding iterations
      */
-    Collection<RootFindingIteration> perform(DoubleUnaryOperator expression);
+    Collection<RootIteration> perform(DoubleUnaryOperator expression);
 }
