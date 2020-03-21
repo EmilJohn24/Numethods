@@ -61,7 +61,9 @@ public final class AlgoUtil {
      * @return Random number between min and max
      */
     public static double generateRandomNumberFrom(double min, double max) {
-        return (Math.random()*((max-min)+1))+min;
+        //NOTE: Change from Math.random to Random in utils lib because of lack of randomness
+        Random r = new Random();
+        return (r.nextDouble()*((max-min)+1))+min;
     }
 
     /**
