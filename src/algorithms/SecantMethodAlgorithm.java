@@ -28,8 +28,8 @@ public class SecantMethodAlgorithm implements RootFindingAlgorithm {
         // function that can generate this properly
         double laggingRoot = postOp.operate(AlgoUtil.generateRandomNumberFrom(0, 100)); //x_(i-1)
         double currentRoot = postOp.operate(AlgoUtil.generateRandomNumberFrom(0, 100)); //x_i
-        double leadingRoot; //x_(i+1)
         double error = Integer.MAX_VALUE;
+        //MINOR: Moved leading root to area of first and last use, inside the iteration
         //PHASE 3: Iterations
         while (error >= maxError) {
             //PHASE 3.1. Calculate results
@@ -41,7 +41,7 @@ public class SecantMethodAlgorithm implements RootFindingAlgorithm {
             iterationCollector.addIteration(generator.create(currentRoot, resultCurrentRoot, error));
 
             //PHASE 3.3. Update roots
-            leadingRoot = postOp.operate(secant(laggingRoot, currentRoot, resultLaggingRoot, resultCurrentRoot));
+            double leadingRoot = postOp.operate(secant(laggingRoot, currentRoot, resultLaggingRoot, resultCurrentRoot)); //x_(i+1)
             //PHASE 3.3.1. Shift by 1
             laggingRoot = currentRoot;
             currentRoot = leadingRoot;
