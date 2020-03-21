@@ -35,11 +35,19 @@ public final class AlgoUtil {
     public static double generateRandomWithinFunctionRange(DoubleUnaryOperator operation, double bottom, double top){
         double newVal = 0.0;
         double functionVal = 0.0;
+        double generationBound = 100.0;
+        int failedAttempts = 0;
+        int MAX_FAILED_ATTEMPTS = 100;
         //PHASE: This keeps generation values until the value of the function is within the range [bottom, top]
         do{
             //TODO: Fix randomization of values here
-            newVal = AlgoUtil.generateRandomNumberFrom(-Double.MAX_VALUE, Double.MAX_VALUE);
+            if (failedAttempts > MAX_FAILED_ATTEMPTS) {
+                generationBound *= 10;
+                failedAttempts = 0;
+            }
+            newVal = AlgoUtil.generateRandomNumberFrom(-generationBound, generationBound);
             functionVal = operation.applyAsDouble(newVal);
+            failedAttempts++;
 
 
         } while (functionVal < bottom || functionVal > top || Double.isInfinite(functionVal));
@@ -56,6 +64,12 @@ public final class AlgoUtil {
         return (Math.random()*((max-min)+1))+min;
     }
 
+    /**
+     * @return A random value within the set of all possible doubles
+     */
+    public static double generateRandomDouble(){
+        return AlgoUtil.generateRandomNumberFrom(-Double.MAX_VALUE, Double.MAX_VALUE);
+    }
     public static double error(double prev, double curr){
         return Math.abs((prev - curr) / prev);
     }

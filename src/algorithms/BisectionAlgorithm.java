@@ -33,7 +33,7 @@ public class BisectionAlgorithm implements RootFindingAlgorithm {
         IterationCollection.Collector iterationCollector = new IterationCollection.Collector();
         //PHASE 2: Generate initial values and store
         double rightRoot = postOp.operate(AlgoUtil.generateRandomWithinFunctionRange(expression,0, Double.MAX_VALUE));
-        double leftRoot = postOp.operate(AlgoUtil.generateRandomWithinFunctionRange(expression, Double.MIN_VALUE, 0));
+        double leftRoot = postOp.operate(AlgoUtil.generateRandomWithinFunctionRange(expression, -Double.MAX_VALUE, 0));
         double midRoot = postOp.operate(getMiddle(leftRoot, rightRoot));
         double resultLeftRoot = postOp.operate(expression.applyAsDouble(leftRoot));
         double resultMidRoot = postOp.operate(expression.applyAsDouble(midRoot));
