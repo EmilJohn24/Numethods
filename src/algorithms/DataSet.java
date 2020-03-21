@@ -5,19 +5,14 @@ import junit.framework.Assert;
 import java.util.*;
 
 /**
- * Single iteration data for root-finding algorithms
+ * A collection of data linked to variables
  */
-class RootIteration implements Iterable<RootIteration.VariableData> {
-  //NOTE: Completely destroyed the original code for this because of verbosity. The new class will have a more JSON-liked interface.
-    //However, to ensure that information about what variables are allowed is preserved, this must not be allowed to construct itself and should rely on some
-    //simpler templating system
+class DataSet implements Iterable<DataSet.VariableData> {
+  //CHANGE: Major changes once again as the original setup was very confusing for algorithm implementation
+    //
 
     private final LinkedHashMap<String, Double> variableValuePair;
 
-    /**
-     * @return Returns an iterator for variable data
-     * @see VariableData
-     */
     @Override
     public Iterator<VariableData> iterator() {
         //This will move the variables from the variable value hashmap into a collection containing variable data objects
@@ -27,6 +22,27 @@ class RootIteration implements Iterable<RootIteration.VariableData> {
             result.add(new VariableData(variableEntry.getKey(), variableEntry.getValue()));
         }
         return result.iterator();
+    }
+
+    /**
+     * Data for a particular variable is stored here. This is only used for output
+     */
+    final class VariableData{
+        private final String variableString;
+        private final double value;
+
+        private VariableData(String variableString, double value){
+            this.variableString = variableString;
+            this.value = value;
+        }
+
+        String getVariableString() {
+            return variableString;
+        }
+
+        double getValue() {
+            return value;
+        }
     }
 
     /**
@@ -64,66 +80,56 @@ class RootIteration implements Iterable<RootIteration.VariableData> {
         public Iterator<String> iterator() {
             return allowedVariableStrings.iterator();
         }
+
+
+        /**
+         * @return The number of variables needed by the template
+         */
+        int getVariableCount(){
+            return allowedVariableStrings.size();
+        }
     }
 
     /**
      * Builds an iteration from a template
      */
-    static final class RootIterationGenerator{
-        private static final Double DEFAULT_VALUE = 0.0;
+    static final class DataSetGenerator {
         private final Template template;
 
         /**
-         * @param template The template to be used to generate iterations
+         * @param template The template to be used to create iterations
          */
-        RootIterationGenerator(final Template template){
+        DataSetGenerator(final Template template){
             this.template = template;
         }
 
         /**
-         * @return A root iteration based on the template
+         * @param values Values to be added to the new iteration
+         * @return A data set based on the template
          */
-        RootIteration generate(){
+        DataSet create(double... values){
+            //NOTE. Since the values placed herein are expected to be reused, it is important that this function takes in only copies of
+            //doubles, and as such, we use the primitive double
+            //PHASE 1: Check if there are too many values
+            if (template.getVariableCount() < values.length) throw new ArrayStoreException("Too many values for template placed");
+
+            //PHASE 2: Setup
             LinkedHashMap<String, Double> newVariableValuePair = new LinkedHashMap<>();
+
+            //PHASE 3: Value placement
+            //NOTE: The next part will use very primitive operations but the complexity will be isolated here
+            //The values will be placed in the exact order they were put in the template
+            int i = 0;
             for (String variableString : template){
-                newVariableValuePair.put(variableString, DEFAULT_VALUE);
+                newVariableValuePair.put(variableString, values[i++]);
             }
-            return new RootIteration(newVariableValuePair);
+            return new DataSet(newVariableValuePair);
         }
     }
 
-    /**
-     * Data for a particular variable is stored here. This is only used for output
-     */
-    final class VariableData{
-        private final String variableString;
-        private final double value;
-
-        private VariableData(String variableString, double value){
-            this.variableString = variableString;
-            this.value = value;
-        }
-
-        public String getVariableString() {
-            return variableString;
-        }
-
-        public double getValue() {
-            return value;
-        }
+    private DataSet(LinkedHashMap<String, Double> variableValuePair){
+        this.variableValuePair = variableValuePair;
     }
-
-    /**
-     * @param variableString Variable
-     * @param value Value to be assigned to the variable
-     */
-    final void assignTo(String variableString, double value){
-        //Some notes on assertion decision: To catch invalid variables as soon as possible, it must be validated immediately that
-        //the user is using a legal variable
-        assertVariableExists(variableString);
-        variableValuePair.put(variableString, value);
-    }
-
     /**
      * @param variableString Variable whose value will be retrieved
      * @return Value of variable
@@ -133,9 +139,6 @@ class RootIteration implements Iterable<RootIteration.VariableData> {
         return variableValuePair.get(variableString);
     }
 
-    private RootIteration(LinkedHashMap<String, Double> variableValuePair){
-        this.variableValuePair = variableValuePair;
-    }
 
     /**
      * Helper method meant to ASSERT if a variable exists

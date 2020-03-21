@@ -10,6 +10,7 @@ import java.util.function.DoubleUnaryOperator;
  * Algebraic expression representation example: {@code x^2 + 3x + 4}.
  */
 public final class SingleVariableExpression implements DoubleUnaryOperator {
+    //NOTE: Removed notion of precision. This will be delegated to a post-operation class
     //This uses the exp4j expression library for expression evaluation and storage
 
     //The sole purpose of this library is to serve as an intermediary between operations requiring
@@ -17,33 +18,7 @@ public final class SingleVariableExpression implements DoubleUnaryOperator {
 
     private final Expression expression;
     private final String variableString;
-    private final AnswerPrecision precision;
 
-    @SuppressWarnings("WeakerAccess")
-    static AnswerPrecision NO_PRECISION = new AnswerPrecision(-1);
-
-    /**
-     * Representation for how precise the answer of the expression should be
-     */
-    static class AnswerPrecision{
-        private int precision;
-
-        AnswerPrecision(int precision){
-            this.precision = precision;
-        }
-
-        /**
-         * @return Precision
-         */
-        private int getPrecision() {
-            return precision;
-        }
-
-        private boolean hasPrecision(){
-            return precision >= 0;
-        }
-
-    }
 
     /**
      * Class for building single variableString expressions
@@ -52,7 +27,6 @@ public final class SingleVariableExpression implements DoubleUnaryOperator {
     static class SingleVariableExpressionBuilder {
         private String expressionString;
         private String variable = "x";
-        private AnswerPrecision precision = NO_PRECISION;
 
         SingleVariableExpressionBuilder(){}
         SingleVariableExpressionBuilder setExpressionString(String expressionString) {
@@ -65,26 +39,21 @@ public final class SingleVariableExpression implements DoubleUnaryOperator {
             return this;
         }
 
-        SingleVariableExpressionBuilder setPrecision(int precisionValue) {
-            this.precision = new AnswerPrecision(precisionValue);
-            return this;
-        }
+
 
         SingleVariableExpression build() {
-            return new SingleVariableExpression(expressionString, variable, precision);
+            return new SingleVariableExpression(expressionString, variable);
         }
     }
     /**
      * Creates a variableString expression from an expression in String form
      * @param expressionString String form of the expression
      * @param variableString Variable used in the expression
-     * @param precision Result precision
      */
 
-    private SingleVariableExpression(String expressionString, String variableString, AnswerPrecision precision){
+    private SingleVariableExpression(String expressionString, String variableString){
         this.expression = new ExpressionBuilder(expressionString).variable(variableString).build();
         this.variableString = variableString;
-        this.precision = precision;
     }
 
     /**
@@ -98,12 +67,9 @@ public final class SingleVariableExpression implements DoubleUnaryOperator {
         are possible
          */
         //Plug in variableString then evaluate
-        double val =
-                expression
+
+        return expression
                 .setVariable(variableString, operand)
                 .evaluate();
-
-        if (precision.hasPrecision()) val = AlgoUtil.truncate(val, precision.getPrecision());
-        return val;
     }
 }

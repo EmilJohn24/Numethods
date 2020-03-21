@@ -1,7 +1,12 @@
 package algorithms.utility;
 
+import org.omg.CORBA.INTERNAL;
+import org.omg.PortableInterceptor.INACTIVE;
+
 import java.text.DecimalFormat;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.DoubleUnaryOperator;
 
 /**
  * Static utility class for basic operations common to all algorithms implemented in this library
@@ -19,15 +24,36 @@ public final class AlgoUtil {
         return Math.floor(value * truncationFactor) / truncationFactor;
     }
 
+    /**
+     * As an explanation, the operation, represented as f(x), must yield a value between bottom and top. A value that satisfies this
+     * is considered a valid value for this function
+     * @param operation Operation whose results the generated value will be based on
+     * @param bottom Lower range
+     * @param top Upper range
+     * @return Generated value
+     */
+    public static double generateRandomWithinFunctionRange(DoubleUnaryOperator operation, double bottom, double top){
+        double newVal = 0.0;
+        double functionVal = 0.0;
+        //PHASE: This keeps generation values until the value of the function is within the range [bottom, top]
+        do{
+            //TODO: Fix randomization of values here
+            newVal = AlgoUtil.generateRandomNumberFrom(-Double.MAX_VALUE, Double.MAX_VALUE);
+            functionVal = operation.applyAsDouble(newVal);
+
+
+        } while (functionVal < bottom || functionVal > top || Double.isInfinite(functionVal));
+        return newVal;
+
+    }
 
     /**
      * @param min Minimum value
      * @param max Maximum value
      * @return Random number between min and max
      */
-    public static int generateRandomNumberFrom(int min, int max) {
-        Random r = new Random();
-        return r.nextInt((max - min) + 1) + min;
+    public static double generateRandomNumberFrom(double min, double max) {
+        return (Math.random()*((max-min)+1))+min;
     }
 
     public static double error(double prev, double curr){

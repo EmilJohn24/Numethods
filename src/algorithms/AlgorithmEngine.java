@@ -13,9 +13,10 @@ final class AlgorithmEngine {
      */
     //TODO: Find a way to make this signature shorter
     @SuppressWarnings("SameParameterValue")
-    static RootComputation computeExpressionRoot(String equation, String variable, double maxError, RootFindingAlgorithm rootFindingAlgorithm){
-        SingleVariableExpression.SingleVariableExpressionBuilder expressionBuilder = new SingleVariableExpression.SingleVariableExpressionBuilder();
-        SingleVariableExpression expression = expressionBuilder.setVariable(variable).setExpressionString(equation).setPrecision(5).build();
-        return rootFindingAlgorithm.perform(expression, maxError);
+    static IterationCollection computeExpressionRoot(String equation, String variable, double maxError, RootFindingAlgorithm rootFindingAlgorithm){
+        SingleVariableExpression.SingleVariableExpressionBuilder
+                expressionBuilder = new SingleVariableExpression.SingleVariableExpressionBuilder();
+        SingleVariableExpression expression = expressionBuilder.setVariable(variable).setExpressionString(equation).build();
+        return rootFindingAlgorithm.perform(expression, PostFunctionOperation.createTruncator(5), maxError);
     }
 }

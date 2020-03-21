@@ -1,7 +1,6 @@
 package algorithms;
 
 import algorithms.utility.AlgoUtil;
-import com.sun.xml.internal.messaging.saaj.util.TeeInputStream;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -10,45 +9,52 @@ import java.util.function.DoubleUnaryOperator;
  */
 public class BisectionAlgorithm implements RootFindingAlgorithm {
     //TODO: Most of the bisection and false position ops are the same. Consider putting them on top of the same abstract class
-    private final RootIteration.Template variableTemplate = new RootIteration.Template("x_l", "x_u", "x_m", "f(x_l)", "f(x_m)", "e");
+    private final DataSet.Template variableTemplate = new DataSet.Template("x_l", "x_u", "x_m", "f(x_l)", "f(x_m)", "e");
 
+    /**
+     * @param left Left value
+     * @param right Right value
+     * @return Middle of left and right
+     */
+    private double getMiddle(double left, double right){
+        return (left + right) / 2;
+    }
     /**
      * @param expression Expression whose root will be found
      * @param maxError Maximum error that will stop iterations
      * @return Result of bisection algorithm
      */
     @Override
-    public RootComputation perform(DoubleUnaryOperator expression, double maxError) {
+    public IterationCollection perform(DoubleUnaryOperator expression, PostFunctionOperation postOp, double maxError) {
         //TODO: This is all a mess really. Consider changing the design of everything pls
-        //PHASE 1: Boilerplate setup. This involves setting up an iteration generator and a collecto.
-        RootIteration.RootIterationGenerator generator = new RootIteration.RootIterationGenerator(variableTemplate);
-        RootComputation.Collector iterationCollector = new RootComputation.Collector();
-        //PHASE 2: First Iteration generation
-        RootIteration firstIter = generator.generate();
-        firstIter.assignTo("e", 1.0); //max out error first
-        firstIter.assignTo("x_l", -1 * AlgoUtil.generateRandomNumberFrom(1, 100));
-        firstIter.assignTo("x_u", AlgoUtil.generateRandomNumberFrom(1, 100));
-        firstIter.assignTo("x_m", (firstIter.getValueOf("x_l") + firstIter.getValueOf("x_u")) / 2);
-        firstIter.assignTo("f(x_l)", expression.applyAsDouble(firstIter.getValueOf("x_l")));
-        firstIter.assignTo("f(x_m)", expression.applyAsDouble(firstIter.getValueOf("x_m")));
-        iterationCollector.addIteration(firstIter);
+        //CHANGE: Removed original implementation because it was very confusing tbh
+        //PHASE 1: Boilerplate setup. This involves setting up an iteration generator and a collector.
+        DataSet.DataSetGenerator generator = new DataSet.DataSetGenerator(variableTemplate);
+        IterationCollection.Collector iterationCollector = new IterationCollection.Collector();
+        //PHASE 2: Generate initial values and store
+        double rightRoot = postOp.operate(AlgoUtil.generateRandomWithinFunctionRange(expression,0, Double.MAX_VALUE));
+        double leftRoot = postOp.operate(AlgoUtil.generateRandomWithinFunctionRange(expression, Double.MIN_VALUE, 0));
+        double midRoot = postOp.operate(getMiddle(leftRoot, rightRoot));
+        double resultLeftRoot = postOp.operate(expression.applyAsDouble(leftRoot));
+        double resultMidRoot = postOp.operate(expression.applyAsDouble(midRoot));
+        double error = Double.MAX_VALUE;
+        iterationCollector.addIteration(generator.create(leftRoot, rightRoot, midRoot, resultLeftRoot, resultMidRoot, error));
 
-        //PHASE 3: Next iterations
-        while(iterationCollector.getLastIteration().getValueOf("e") > maxError){
-            RootIteration currentIter = generator.generate();
-            if (iterationCollector.getLastIteration().getValueOf("f(x_l)") * iterationCollector.getLastIteration().getValueOf("f(x_m)") < 0){
-                currentIter.assignTo("x_u", iterationCollector.getLastIteration().getValueOf("x_m"));
-                currentIter.assignTo("x_l", iterationCollector.getLastIteration().getValueOf("x_l"));
-            } else{
-                currentIter.assignTo("x_l", iterationCollector.getLastIteration().getValueOf("x_m"));
-                currentIter.assignTo("x_u", iterationCollector.getLastIteration().getValueOf("x_u"));
-            }
-            currentIter.assignTo("x_m", (currentIter.getValueOf("x_l") + currentIter.getValueOf("x_u")) / 2);
-            currentIter.assignTo("f(x_l)", expression.applyAsDouble(currentIter.getValueOf("x_l")));
-            currentIter.assignTo("f(x_m)", expression.applyAsDouble(currentIter.getValueOf("x_m")));
-            currentIter.assignTo("e", AlgoUtil.error(iterationCollector.getLastIteration().getValueOf("x_m"), currentIter.getValueOf("x_m")));
-            iterationCollector.addIteration(currentIter);
+        //PHASE 3: Iterate
+        while (error >= maxError){
+            //PHASE 3.1: This is based on the condition sign(x_l) == sign(x_m)
+            if (resultLeftRoot * resultMidRoot > 0) leftRoot = midRoot;
+            else rightRoot = midRoot;
+            //PHASE 3.2. Store previous middle root and compute for new one
+            double prevMidRoot = midRoot;
+            midRoot = postOp.operate(getMiddle(leftRoot, rightRoot));
+            //PHASE 3.3. Finalize other function operations
+            resultLeftRoot  = postOp.operate(expression.applyAsDouble(leftRoot));
+            resultMidRoot = postOp.operate(expression.applyAsDouble(midRoot));
+            error = AlgoUtil.error(prevMidRoot, midRoot);
+            iterationCollector.addIteration(generator.create(leftRoot, rightRoot, midRoot, resultLeftRoot, resultMidRoot, error));
         }
+
 
         return iterationCollector.collect();
     }
