@@ -1,5 +1,6 @@
 package algorithms.utility;
 
+import algorithms.RegressionData;
 import org.omg.CORBA.INTERNAL;
 import org.omg.PortableInterceptor.INACTIVE;
 
@@ -66,12 +67,23 @@ public final class AlgoUtil {
         return (r.nextDouble()*((max-min)+1))+min;
     }
 
+    //REMOVE: Removed double number generator because it kept spitting out infinite numbers
     /**
-     * @return A random value within the set of all possible doubles
+     * Specialized regression method for getting sum of the products of powers
+     * @param data Data to be used in the computation
+     * @param xPower Power to be raised to values of x
+     * @param yPower Power to be raised to values of y
+     * @return Sum of all x raised to {@code xPower} times y raised to {@code yPower}
      */
-    public static double generateRandomDouble(){
-        return AlgoUtil.generateRandomNumberFrom(-Double.MAX_VALUE, Double.MAX_VALUE);
+    public static double powProductSum(RegressionData data, double xPower, double yPower){
+        double result = 0.0;
+        for (RegressionData.RegressionDataPair dataPair : data){
+            result += Math.pow(dataPair.getX(), xPower) * Math.pow(dataPair.getY(), yPower);
+        }
+        return result;
     }
+
+
     public static double error(double prev, double curr){
         return Math.abs((prev - curr) / prev);
     }

@@ -55,6 +55,7 @@ public class GaussianEliminationAlgorithm implements LinearEquationSolvingAlgori
      */
     @Override
     public MatrixSequence process(ReducedRowEchelonMatrix matrix, PostFunctionOperation postOp) throws InvalidAlgorithmParameterException {
+        //TODO: NOTE: Consider using the matrix manipulation facilities of ejml in future revisions
         //PHASE 1. Boilerplate and exceptional case checking
         if (matrix.numRows() != matrix.numCols()) throw new InvalidAlgorithmParameterException("Matrix must be a square for proper results");
         MatrixSequence.MatrixSequenceBuilder matrixSequenceBuilder = new MatrixSequence.MatrixSequenceBuilder();
