@@ -34,6 +34,9 @@ public class AlgoUtilTest extends TestCase {
     //TODO: Test goes here...
         assert AlgoUtil.truncate(3.1415, 2) == 3.14;
         assert AlgoUtil.truncate(3.9235634, 4) == 3.9235;
+        //ADD: Added negative value test
+        assert AlgoUtil.truncate(-2.4142, 2) == -2.41;
+        assert AlgoUtil.truncate(-0.3123456, 5) == -0.31234;
     }
 
 

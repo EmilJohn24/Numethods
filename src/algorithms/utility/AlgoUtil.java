@@ -52,7 +52,8 @@ public final class AlgoUtil {
     //NOTE: Made final to prevent tampering and inheritance
     public static double truncate(double value, double decimalCount){
         double truncationFactor = Math.pow(10, decimalCount);
-        return Math.floor(value * truncationFactor) / truncationFactor;
+        //FIX: The floored value must be positive but the sign must be maintained
+        return Math.signum(value) * Math.floor(Math.abs(value) * truncationFactor) / truncationFactor;
     }
 
     /**
