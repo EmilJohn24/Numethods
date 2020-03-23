@@ -14,11 +14,13 @@ public class RegressionPrototypeMain {
         for (int i = 0; i != dataCount; i++){
             data.add(numberScanner.nextDouble(), numberScanner.nextDouble());
         }
-        System.out.print("Degree of Polynomial:");
-        SimpleMatrix results = new PolynomialRegressionAlgorithm().regress(data, numberScanner.nextInt(), PostFunctionOperation.createTruncator(5));
-        for (int i = 0; i != results.numRows(); ++i){
-            System.out.println("a_" + i + ": " + results.get(i));
-        }
+        SimpleMatrix results = ExponentialRegressionAlgorithm.STANDARD.regress(data, PostFunctionOperation.createTruncator(5));
+//        for (int i = 0; i != results.numRows(); ++i){
+//            System.out.println("a_" + i + ": " + results.get(i));
+//        }
+
+        System.out.println("A = " + results.get(0));
+        System.out.println("b = " + results.get(1));
 
     }
 

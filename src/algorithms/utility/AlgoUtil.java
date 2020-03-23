@@ -1,18 +1,48 @@
 package algorithms.utility;
 
 import algorithms.RegressionData;
-import org.omg.CORBA.INTERNAL;
-import org.omg.PortableInterceptor.INACTIVE;
 
-import java.text.DecimalFormat;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.DoubleUnaryOperator;
 
 /**
  * Static utility class for basic operations common to all algorithms implemented in this library
  */
 public final class AlgoUtil {
+    //REMOVE: Removed double number generator because it kept spitting out infinite numbers
+
+    //SECTION: REGRESSION-RELATED UTILITY FUNCTIONS
+
+    /**
+     * Does an operation for all values of x and y in a regression data set. This does not alter the original data as it is immutable, but instead
+     * creates a new data set with the operated-on values.
+     * @param data Regression data to be manipulated
+     * @param xOperation Operation to be done on all values of x
+     * @param yOperation Operation to be done on all values of y
+     * @return Regression data set which contains the results of all operations
+     */
+    public static RegressionData forEach(RegressionData data, DoubleUnaryOperator xOperation, DoubleUnaryOperator yOperation){
+        RegressionData result = new RegressionData();
+        for (RegressionData.RegressionDataPair dataPair : data){
+            result.add(xOperation.applyAsDouble(dataPair.getX()), yOperation.applyAsDouble(dataPair.getY()));
+        }
+        return result;
+    }
+
+    /**
+     * Specialized regression method for getting sum of the products of powers
+     * @param data Data to be used in the computation
+     * @param xPower Power to be raised to values of x
+     * @param yPower Power to be raised to values of y
+     * @return Sum of all x raised to {@code xPower} times y raised to {@code yPower}
+     */
+    public static double powProductSum(RegressionData data, double xPower, double yPower){
+        double result = 0.0;
+        for (RegressionData.RegressionDataPair dataPair : data){
+            result += Math.pow(dataPair.getX(), xPower) * Math.pow(dataPair.getY(), yPower);
+        }
+        return result;
+    }
     /**
      * Truncates {@code value} to {@code decimalCount} decimals
      * @param value Value to be truncated
@@ -67,21 +97,7 @@ public final class AlgoUtil {
         return (r.nextDouble()*((max-min)+1))+min;
     }
 
-    //REMOVE: Removed double number generator because it kept spitting out infinite numbers
-    /**
-     * Specialized regression method for getting sum of the products of powers
-     * @param data Data to be used in the computation
-     * @param xPower Power to be raised to values of x
-     * @param yPower Power to be raised to values of y
-     * @return Sum of all x raised to {@code xPower} times y raised to {@code yPower}
-     */
-    public static double powProductSum(RegressionData data, double xPower, double yPower){
-        double result = 0.0;
-        for (RegressionData.RegressionDataPair dataPair : data){
-            result += Math.pow(dataPair.getX(), xPower) * Math.pow(dataPair.getY(), yPower);
-        }
-        return result;
-    }
+
 
 
     public static double error(double prev, double curr){
