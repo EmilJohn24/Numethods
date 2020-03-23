@@ -9,10 +9,18 @@ import java.util.function.DoubleUnaryOperator;
  * Static utility class for basic operations common to all algorithms implemented in this library
  */
 public final class AlgoUtil {
+    /**
+     * Although it is a trivial operation, multiplication can often clutter a line, and so this is meant to clean up some instances of multiplication
+     * @param a First num
+     * @param b Second num
+     * @return a * b
+     */
     //REMOVE: Removed double number generator because it kept spitting out infinite numbers
+    public static double multiply(double a, double b){
+        return a * b;
+    }
 
     //SECTION: REGRESSION-RELATED UTILITY FUNCTIONS
-
     /**
      * Does an operation for all values of x and y in a regression data set. This does not alter the original data as it is immutable, but instead
      * creates a new data set with the operated-on values.
