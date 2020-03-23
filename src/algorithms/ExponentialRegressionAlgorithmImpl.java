@@ -21,7 +21,8 @@ class ExponentialRegressionAlgorithmImpl implements ExponentialRegressionAlgorit
         //PHASE 3: Convert linear coefficients back to exponential coefficients
         //A = e^a_0
         SimpleMatrix exponentialCoefficients = linearCoefficients.copy();
-        exponentialCoefficients.set(0, Math.exp(linearCoefficients.get(0))); //Gets a_0 from linear coefficients, computes A = e^a_0 and places A
+        //CHANGE: Forgot to do post operation for A here
+        exponentialCoefficients.set(0, postOps.operate(Math.exp(linearCoefficients.get(0)))); //Gets a_0 from linear coefficients, computes A = e^a_0 and places A
 
         return exponentialCoefficients;
     }
