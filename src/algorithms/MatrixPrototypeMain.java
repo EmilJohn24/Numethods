@@ -14,7 +14,7 @@ import java.util.Scanner;
  * Meant for quick testing matrix operations only, the implementations are crap because they are subject to rapid prototyping
  */
 public class MatrixPrototypeMain {
-    static public void main(String[] args){
+    static public void main(String[] args) throws InvalidPropertiesFormatException, InvalidAlgorithmParameterException {
         Scanner sizeScanner = new Scanner(System.in);
         System.out.println("Dimension: ");
         int rows = sizeScanner.nextInt();
@@ -81,6 +81,24 @@ public class MatrixPrototypeMain {
         } catch (InvalidAlgorithmParameterException | InvalidPropertiesFormatException e) {
             e.printStackTrace();
         }
+
+
+        //SEIDEL TESTER
+        System.out.println("------------------\nSEIDEL: ");
+        System.out.println("Initial Values:");
+        SimpleMatrix initialValues = new SimpleMatrix(rows, 1);
+        for (int i = 0; i != rows; ++i){
+            valueScanner = new Scanner(System.in);
+            initialValues.set(i, valueScanner.nextDouble());
+        }
+        System.out.println(initialValues);
+        System.out.println("MAX ERROR: ");
+        double maxError = valueScanner.nextDouble();
+        MatrixSequence seidelResult = new GaussSeidel(initialValues, maxError).process(ReducedRowEchelonMatrix.fromMatrixVector(matrix,vector), PostFunctionOperation.createTruncator(5));
+        for (ReducedRowEchelonMatrix seidelVector : seidelResult){
+            seidelVector.getVector().print("%.5f");
+        }
+        seidelResult.getAnswerVector().print("%.5f");
 
     }
 }
