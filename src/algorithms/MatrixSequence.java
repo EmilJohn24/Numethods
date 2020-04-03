@@ -5,17 +5,26 @@ import org.ejml.simple.SimpleMatrix;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Sequence of matrices resulting from succeeding operations
  */
 public class MatrixSequence implements Iterable<ReducedRowEchelonMatrix> {
-    private final Collection<ReducedRowEchelonMatrix> matrices;
+    //CHANGE: CHanged this to a list because there is a need to access last element now to accomodate for LU Decomposition
+    private final List<ReducedRowEchelonMatrix> matrices;
     private final SimpleMatrix answerVector;
 
-    private MatrixSequence(Collection<ReducedRowEchelonMatrix> matrices, SimpleMatrix answerMatrix){
+    private MatrixSequence(List<ReducedRowEchelonMatrix> matrices, SimpleMatrix answerMatrix){
         this.matrices = matrices;
         this.answerVector = answerMatrix;
+    }
+
+    /**
+     * @return Last matrix in echelon form
+     */
+    final ReducedRowEchelonMatrix getLastMatrixEchelon(){
+        return matrices.get(matrices.size() - 1);
     }
 
     /**
@@ -38,7 +47,7 @@ public class MatrixSequence implements Iterable<ReducedRowEchelonMatrix> {
      * Builder for matrix sequences
      */
     static class MatrixSequenceBuilder{
-        private Collection<ReducedRowEchelonMatrix> matrices = new ArrayList<>();
+        private List<ReducedRowEchelonMatrix> matrices = new ArrayList<>();
 
         MatrixSequenceBuilder(){ }
 

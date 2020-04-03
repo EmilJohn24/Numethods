@@ -7,7 +7,9 @@ import java.util.InvalidPropertiesFormatException;
 /**
  * Matrix and vector combined in reduced row echelon fashion
  */
+@SuppressWarnings("WeakerAccess")
 public final class ReducedRowEchelonMatrix {
+    //NOTE: Made everything here public for utility purposes
     private final SimpleMatrix matrix;
     private final SimpleMatrix vector;
 
@@ -16,7 +18,7 @@ public final class ReducedRowEchelonMatrix {
      * @param vector Vector of the same height as the matrix above
      * @return An object representing their combination
      */
-    static ReducedRowEchelonMatrix fromMatrixVector(SimpleMatrix matrix, SimpleMatrix vector) throws InvalidPropertiesFormatException {
+    public static ReducedRowEchelonMatrix fromMatrixVector(SimpleMatrix matrix, SimpleMatrix vector) throws InvalidPropertiesFormatException {
         //PHASE 1: Handle exceptional cases
         if (!vector.isVector()) throw new InvalidPropertiesFormatException("Second parameter must be a vector");
         if (vector.numRows() != matrix.numRows()) throw new InvalidPropertiesFormatException("Vector and matrix must have same number of rows");
@@ -34,35 +36,35 @@ public final class ReducedRowEchelonMatrix {
     /**
      * @return Vector pertaining to the rhs
      */
-    SimpleMatrix getVector(){
+    public SimpleMatrix getVector(){
         return this.vector;
     }
 
     /**
      * @return Matrix without rhs
      */
-    SimpleMatrix getMatrix(){
+    public SimpleMatrix getMatrix(){
         return this.matrix;
     }
 
     /**
      * @return Copy of matrix
      */
-    ReducedRowEchelonMatrix copy(){
+    public ReducedRowEchelonMatrix copy(){
         return new ReducedRowEchelonMatrix(matrix, vector);
     }
 
     /**
      * @return Number of rows
      */
-    int numRows(){
+    public int numRows(){
         return this.matrix.numRows();
     }
 
     /**
      * @return Number of columns
      */
-    int numCols(){
+    public int numCols(){
         return this.matrix.numCols();
     }
 

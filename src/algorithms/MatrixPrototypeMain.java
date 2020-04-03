@@ -1,5 +1,9 @@
 package algorithms;
 
+import org.ejml.data.D1Matrix64F;
+import org.ejml.data.Matrix64F;
+import org.ejml.ops.MatrixIO;
+import org.ejml.simple.SimpleBase;
 import org.ejml.simple.SimpleMatrix;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -38,12 +42,45 @@ public class MatrixPrototypeMain {
         try {
             MatrixSequence sequence = gauss.process(ReducedRowEchelonMatrix.fromMatrixVector(matrix, vector), PostFunctionOperation.createTruncator(5));
             for (ReducedRowEchelonMatrix rowEchelonMatrix : sequence){
-                System.out.println(rowEchelonMatrix);
+//                System.out.println(rowEchelonMatrix);
+                rowEchelonMatrix.getMatrix().print("%.5f");
+                System.out.println("RHS: ");
+                rowEchelonMatrix.getVector().print("%.5f");
             }
             System.out.println("Answer:");
-            System.out.println(sequence.getAnswerVector());
+            sequence.getAnswerVector().print("%.5f");
+
+//            System.out.println(sequence.getAnswerVector());
+
+
         } catch (InvalidAlgorithmParameterException | InvalidPropertiesFormatException e) {
             e.printStackTrace();
         }
+
+
+        try {
+            System.out.println("\n\n\n\n---------------------------------");
+            System.out.println("Matrix Inversion: ");
+            LUDecomposition.LUDecompositionPackage LUPackage = new LUDecomposition()
+                                        .process(ReducedRowEchelonMatrix
+                                                    .fromMatrixVector(matrix, vector), PostFunctionOperation.createTruncator(5));
+            System.out.println("Lower Triangle: ");
+            LUPackage.getLowerTriangularMatrixSequence().getLastMatrixEchelon().getMatrix().print("%.5f");
+            System.out.println("Upper Triangle: ");
+            LUPackage.getUpperTriangularMatrixSequence().getLastMatrixEchelon().getMatrix().print("%.5f");
+            for (MatrixSequence inversionMatrixSequence : LUPackage.getInversionSequence()){
+                System.out.println("\n\nNEW COLUMN: ");
+                for (ReducedRowEchelonMatrix midInversionMatrix : inversionMatrixSequence){
+                    midInversionMatrix.getMatrix().print("%.5f");
+                    System.out.println("RHS: ");
+                    midInversionMatrix.getVector().print("%.5f");
+                }
+            }
+            System.out.println("Inversion:");
+            LUPackage.getInverse().print("%.5f");
+        } catch (InvalidAlgorithmParameterException | InvalidPropertiesFormatException e) {
+            e.printStackTrace();
+        }
+
     }
 }
