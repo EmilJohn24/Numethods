@@ -49,9 +49,8 @@ public class GaussSeidel implements LinearEquationSolvingAlgorithm{
                 for (int j = 0; j < matrix.numCols(); ++j)
                     if (i != j)
                         sumOfOthers += runningValues.get(j) * matrix.getMatrix().get(i, j);
-                sumOfOthers = postOp.operate(sumOfOthers);
                 runningValues.set(i, postOp.operate(matrix.getVector().get(i) - sumOfOthers) / matrix.getMatrix().get(i, i));
-                errors.set(i, postOp.operate(AlgoUtil.error(prevValue, runningValues.get(i))));
+                errors.set(i, postOp.operate(AlgoUtil.flippedError(prevValue, runningValues.get(i))));
             }
             matrixSequenceBuilder.add(ReducedRowEchelonMatrix.fromMatrixVector(runningValues.copy(), runningValues.copy()));
 

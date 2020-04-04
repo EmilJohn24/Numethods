@@ -13,8 +13,10 @@ import java.util.Collection;
 @SuppressWarnings("unused")
 interface PolynomialRegressionAlgorithm extends RegressionAlgorithm {
     //ADD: Added standard static variables here
+    //ADD: CUBIC
     PolynomialRegressionAlgorithm LINEAR =  PolynomialRegressionAlgorithmImpl.fromDegree(1);
     PolynomialRegressionAlgorithm QUADRATIC = PolynomialRegressionAlgorithmImpl.fromDegree(2);
+    PolynomialRegressionAlgorithm CUBIC = PolynomialRegressionAlgorithmImpl.fromDegree(3);
     //CHANGE: Moved the regression method to the main regression algorithm class because the notion of degrees can be removed from the notion of regression
     /**
      * @return Degree of polynomial regression

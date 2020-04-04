@@ -167,4 +167,5 @@ public final class AlgoUtil {
     public static double error(double prev, double curr){
         return Math.abs((prev - curr) / prev);
     }
+    public static double flippedError(double prev, double curr) {return Math.abs((curr - prev) / curr);}
 }

@@ -21,7 +21,7 @@ public class PartialPivotedGaussianElimination implements LinearEquationSolvingA
         SimpleMatrix comparisonValues = pivotedMatrix.getMatrix().extractVector(false, row);
         int maxRow = 0;
         for (int i = 0; i != pivotedMatrix.numRows(); ++i){
-            if (comparisonValues.get(maxRow) < comparisonValues.get(i)) maxRow = i;
+            if (Math.abs(comparisonValues.get(maxRow)) < Math.abs(comparisonValues.get(i))) maxRow = i;
         }
         pivotedMatrix.swapRows(row, maxRow);
         return pivotedMatrix;
