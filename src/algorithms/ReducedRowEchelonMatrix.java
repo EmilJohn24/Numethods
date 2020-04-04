@@ -68,6 +68,25 @@ public final class ReducedRowEchelonMatrix {
         return this.matrix.numCols();
     }
 
+    /**
+     * @param a First row to be swapped
+     * @param b Second row to be swapped
+     */
+    public void swapRows(int a, int b){
+        SimpleMatrix firstRow = matrix.extractVector(true, a);
+        SimpleMatrix secondRow = matrix.extractVector(true, b);
+        //PHASE 1: Matrix row swap
+        for (int j = 0; j != matrix.numCols(); ++j){
+            matrix.set(a, j, secondRow.get(j));
+            matrix.set(b, j, firstRow.get(j));
+        }
+        //PHASE 2: Vector swap
+        double firstRowRHS = vector.get(a);
+        double secondRowRHS = vector.get(b);
+        vector.set(a, secondRowRHS);
+        vector.set(b, firstRowRHS);
+
+    }
 
     @Override
     public String toString() {

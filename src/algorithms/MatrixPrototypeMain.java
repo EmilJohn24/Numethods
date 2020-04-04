@@ -57,6 +57,27 @@ public class MatrixPrototypeMain {
             e.printStackTrace();
         }
 
+        //PARTIAL PIVOTING
+        System.out.println("---------------\nWITH PARTIAL PIVOTING:\n");
+        PartialPivotedGaussianElimination pivoted = new PartialPivotedGaussianElimination();
+        try {
+            MatrixSequence sequence = pivoted.process(ReducedRowEchelonMatrix.fromMatrixVector(matrix, vector), PostFunctionOperation.createTruncator(5));
+            for (ReducedRowEchelonMatrix rowEchelonMatrix : sequence){
+//                System.out.println(rowEchelonMatrix);
+                rowEchelonMatrix.getMatrix().print("%.5f");
+                System.out.println("RHS: ");
+                rowEchelonMatrix.getVector().print("%.5f");
+            }
+            System.out.println("Answer:");
+            sequence.getAnswerVector().print("%.5f");
+
+//            System.out.println(sequence.getAnswerVector());
+
+
+        } catch (InvalidAlgorithmParameterException | InvalidPropertiesFormatException e) {
+            e.printStackTrace();
+        }
+
 
         try {
             System.out.println("\n\n\n\n---------------------------------");
@@ -68,6 +89,8 @@ public class MatrixPrototypeMain {
             LUPackage.getLowerTriangularMatrixSequence().getLastMatrixEchelon().getMatrix().print("%.5f");
             System.out.println("Upper Triangle: ");
             LUPackage.getUpperTriangularMatrixSequence().getLastMatrixEchelon().getMatrix().print("%.5f");
+            System.out.println("Product:");
+            LUPackage.getMatrixProduct().print("%.5f");
             for (MatrixSequence inversionMatrixSequence : LUPackage.getInversionSequence()){
                 System.out.println("\n\nNEW COLUMN: ");
                 for (ReducedRowEchelonMatrix midInversionMatrix : inversionMatrixSequence){
