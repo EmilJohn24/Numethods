@@ -21,7 +21,7 @@ public class GaussianEliminationAlgorithm implements LinearEquationSolvingAlgori
      * @return Result of Gaussian elimination
      */
     @Override
-    public MatrixSequence process(ReducedRowEchelonMatrix matrix, PostFunctionOperation postOp) throws InvalidAlgorithmParameterException {
+    public MatrixSequence process(ReducedRowEchelonMatrix matrix, PostFunctionOperation postOp) throws InvalidAlgorithmParameterException, InvalidPropertiesFormatException {
         //TODO: NOTE: Consider using the matrix manipulation facilities of ejml in future revisions
         //PHASE 1. Boilerplate and exceptional case checking
         if (matrix.numRows() != matrix.numCols()) throw new InvalidAlgorithmParameterException("Matrix must be a square for proper results");
@@ -30,7 +30,7 @@ public class GaussianEliminationAlgorithm implements LinearEquationSolvingAlgori
         ReducedRowEchelonMatrix trackingMatrix = matrix;
         for (int i = 0; i < matrix.numRows(); ++i) {
             for (int j = 0; j < i; ++j) {
-                trackingMatrix = AlgoUtil.eliminate(trackingMatrix, i, j);
+                trackingMatrix = AlgoUtil.postOperateMatrix(AlgoUtil.eliminate(trackingMatrix, i, j), postOp);
                 matrixSequenceBuilder.add(trackingMatrix.copy()); //A copy of a matrix is placed unto the collector builder to ensure it will not be garbage-collected
             }
         }

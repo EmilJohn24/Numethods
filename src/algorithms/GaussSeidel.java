@@ -40,7 +40,7 @@ public class GaussSeidel implements LinearEquationSolvingAlgorithm{
         for (int i = 0; i < runningValues.numRows(); ++i) errors.add(Double.MAX_VALUE);
 
         //PHASE 2. Iteration
-        while (errors.stream().allMatch(error -> error >= maxError)){
+        while (errors.stream().anyMatch(error -> error >= maxError)){
             for (int i = 0; i < runningValues.numRows(); ++i){
                 //PHASE 2.1.1. Initialize values
                 double sumOfOthers = 0.0;

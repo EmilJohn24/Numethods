@@ -163,7 +163,17 @@ public final class AlgoUtil {
         }
         return resultMatrix;
     }
-
+    /**
+     * @param matrix Matrix to be operated on
+     * @param postOp Operation to be done to all values of the matrix
+     * @return Processed matrix in echelon form
+     */
+    public static ReducedRowEchelonMatrix postOperateMatrix(ReducedRowEchelonMatrix matrix, PostFunctionOperation postOp) throws InvalidPropertiesFormatException {
+        //PHASE 1: Copy matrix over
+        SimpleMatrix postOperatedInternalMatrix = AlgoUtil.postOperateMatrix(matrix.getMatrix(), postOp);
+        SimpleMatrix postOperatedInternalVector = AlgoUtil.postOperateMatrix(matrix.getVector(), postOp);
+        return ReducedRowEchelonMatrix.fromMatrixVector(postOperatedInternalMatrix, postOperatedInternalVector);
+    }
     public static double error(double prev, double curr){
         return Math.abs((prev - curr) / prev);
     }

@@ -1,5 +1,6 @@
 package algorithms;
 
+import algorithms.utility.AlgoUtil;
 import org.ejml.data.D1Matrix64F;
 import org.ejml.data.Matrix64F;
 import org.ejml.ops.MatrixIO;
@@ -40,7 +41,7 @@ public class MatrixPrototypeMain {
 
         GaussianEliminationAlgorithm gauss = new GaussianEliminationAlgorithm();
         try {
-            MatrixSequence sequence = gauss.process(ReducedRowEchelonMatrix.fromMatrixVector(matrix, vector), PostFunctionOperation.createTruncator(5));
+            MatrixSequence sequence = gauss.process(ReducedRowEchelonMatrix.fromMatrixVector(matrix.copy(), vector.copy()), PostFunctionOperation.createTruncator(5));
             for (ReducedRowEchelonMatrix rowEchelonMatrix : sequence){
 //                System.out.println(rowEchelonMatrix);
                 rowEchelonMatrix.getMatrix().print("%.5f");
@@ -61,7 +62,7 @@ public class MatrixPrototypeMain {
         System.out.println("---------------\nWITH PARTIAL PIVOTING:\n");
         PartialPivotedGaussianElimination pivoted = new PartialPivotedGaussianElimination();
         try {
-            MatrixSequence sequence = pivoted.process(ReducedRowEchelonMatrix.fromMatrixVector(matrix, vector), PostFunctionOperation.createTruncator(5));
+            MatrixSequence sequence = pivoted.process(ReducedRowEchelonMatrix.fromMatrixVector(matrix.copy(), vector.copy()), PostFunctionOperation.createTruncator(5));
             for (ReducedRowEchelonMatrix rowEchelonMatrix : sequence){
 //                System.out.println(rowEchelonMatrix);
                 rowEchelonMatrix.getMatrix().print("%.5f");
@@ -84,7 +85,7 @@ public class MatrixPrototypeMain {
             System.out.println("Matrix Inversion: ");
             LUDecomposition.LUDecompositionPackage LUPackage = new LUDecomposition()
                                         .process(ReducedRowEchelonMatrix
-                                                    .fromMatrixVector(matrix, vector), PostFunctionOperation.createTruncator(5));
+                                                    .fromMatrixVector(matrix.copy(), vector.copy()), PostFunctionOperation.createTruncator(5));
             System.out.println("Lower Triangle: ");
             LUPackage.getLowerTriangularMatrixSequence().getLastMatrixEchelon().getMatrix().print("%.5f");
             System.out.println("Upper Triangle: ");
@@ -117,7 +118,7 @@ public class MatrixPrototypeMain {
         System.out.println(initialValues);
         System.out.println("MAX ERROR: ");
         double maxError = valueScanner.nextDouble();
-        MatrixSequence seidelResult = new GaussSeidel(initialValues, maxError).process(ReducedRowEchelonMatrix.fromMatrixVector(matrix,vector), PostFunctionOperation.createTruncator(5));
+        MatrixSequence seidelResult = new GaussSeidel(initialValues, maxError).process(ReducedRowEchelonMatrix.fromMatrixVector(matrix.copy(), vector.copy()), PostFunctionOperation.createTruncator(5));
         for (ReducedRowEchelonMatrix seidelVector : seidelResult){
             seidelVector.getVector().print("%.5f");
         }

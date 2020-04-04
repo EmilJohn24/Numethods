@@ -4,6 +4,7 @@ import algorithms.utility.AlgoUtil;
 import org.ejml.simple.SimpleMatrix;
 
 import java.security.InvalidAlgorithmParameterException;
+import java.util.InvalidPropertiesFormatException;
 
 /**
  * Gaussian elimination with Partial Pivoting
@@ -22,6 +23,7 @@ public class PartialPivotedGaussianElimination implements LinearEquationSolvingA
         int maxRow = 0;
         for (int i = 0; i != pivotedMatrix.numRows(); ++i){
             if (Math.abs(comparisonValues.get(maxRow)) < Math.abs(comparisonValues.get(i))) maxRow = i;
+            System.out.println();
         }
         pivotedMatrix.swapRows(row, maxRow);
         return pivotedMatrix;
@@ -32,7 +34,7 @@ public class PartialPivotedGaussianElimination implements LinearEquationSolvingA
      * @return Result of Gaussian elimination
      */
     @Override
-    public MatrixSequence process(ReducedRowEchelonMatrix matrix, PostFunctionOperation postOp) throws InvalidAlgorithmParameterException {
+    public MatrixSequence process(ReducedRowEchelonMatrix matrix, PostFunctionOperation postOp) throws InvalidAlgorithmParameterException, InvalidPropertiesFormatException {
         //TODO: NOTE: Consider using the matrix manipulation facilities of ejml in future revisions
         //PHASE 1. Boilerplate and exceptional case checking
         if (matrix.numRows() != matrix.numCols()) throw new InvalidAlgorithmParameterException("Matrix must be a square for proper results");
@@ -42,7 +44,7 @@ public class PartialPivotedGaussianElimination implements LinearEquationSolvingA
         for (int i = 0; i < matrix.numRows(); ++i) {
             trackingMatrix = this.partialPivot(trackingMatrix, i);
             for (int j = 0; j < i; ++j) {
-                trackingMatrix = AlgoUtil.eliminate(trackingMatrix, i, j);
+                trackingMatrix = AlgoUtil.postOperateMatrix(AlgoUtil.eliminate(trackingMatrix, i, j), postOp);
                 matrixSequenceBuilder.add(trackingMatrix.copy()); //A copy of a matrix is placed unto the collector builder to ensure it will not be garbage-collected
             }
         }
