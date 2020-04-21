@@ -11,7 +11,8 @@ import java.util.Collection;
  *     In other words, construction must include the degree
  */
 @SuppressWarnings("unused")
-interface PolynomialRegressionAlgorithm extends RegressionAlgorithm {
+public interface PolynomialRegressionAlgorithm extends RegressionAlgorithm {
+    //CHANGE: Changed to public
     //ADD: Added standard static variables here
     //ADD: CUBIC
     PolynomialRegressionAlgorithm LINEAR =  PolynomialRegressionAlgorithmImpl.fromDegree(1);

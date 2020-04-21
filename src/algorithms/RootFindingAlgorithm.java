@@ -15,4 +15,5 @@ public interface RootFindingAlgorithm {
     //NOTE: Return type was changed to a more well-encapsulated root computation class
     //CHANGE: Changed all params to final and added post-operation concept
     IterationCollection perform(final DoubleUnaryOperator expression, final PostFunctionOperation postOp, final double maxError);
+
 }

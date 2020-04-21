@@ -3,7 +3,8 @@ package algorithms;
 /**
  * Class for running custom algorithms
  */
-final class AlgorithmEngine {
+public final class AlgorithmEngine {
+    //CHANGE: Made public because it will be used elsewhere
     /**
      * @param equation Equation to be solved
      * @param variable Variable within equation
@@ -13,7 +14,7 @@ final class AlgorithmEngine {
      */
     //TODO: Find a way to make this signature shorter
     @SuppressWarnings("SameParameterValue")
-    static IterationCollection computeExpressionRoot(String equation, String variable, double maxError, RootFindingAlgorithm rootFindingAlgorithm){
+    public static IterationCollection computeExpressionRoot(String equation, String variable, double maxError, RootFindingAlgorithm rootFindingAlgorithm){
         SingleVariableExpression.SingleVariableExpressionBuilder
                 expressionBuilder = new SingleVariableExpression.SingleVariableExpressionBuilder();
         SingleVariableExpression expression = expressionBuilder.setVariable(variable).setExpressionString(equation).build();
@@ -27,7 +28,7 @@ final class AlgorithmEngine {
      * @param segments Number of segments
      * @return Integral of the expression
      */
-    static double integrateExpression(String expressionString, String variable, double low, double high, int segments, IntegrationAlgorithm algorithm){
+    public static double integrateExpression(String expressionString, String variable, double low, double high, int segments, IntegrationAlgorithm algorithm){
         SingleVariableExpression.SingleVariableExpressionBuilder
                 expressionBuilder = new SingleVariableExpression.SingleVariableExpressionBuilder();
         SingleVariableExpression expression = expressionBuilder.setVariable(variable).setExpressionString(expressionString).build();

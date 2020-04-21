@@ -20,10 +20,11 @@ public class MatrixSequence implements Iterable<ReducedRowEchelonMatrix> {
         this.answerVector = answerMatrix;
     }
 
+
     /**
      * @return Last matrix in echelon form
      */
-    final ReducedRowEchelonMatrix getLastMatrixEchelon(){
+    public final ReducedRowEchelonMatrix getLastMatrixEchelon(){
         return matrices.get(matrices.size() - 1);
     }
 
@@ -38,7 +39,7 @@ public class MatrixSequence implements Iterable<ReducedRowEchelonMatrix> {
     /**
      * @return The answer matrix
      */
-    final SimpleMatrix getAnswerVector(){
+    public final SimpleMatrix getAnswerVector(){
         return answerVector;
     }
 
