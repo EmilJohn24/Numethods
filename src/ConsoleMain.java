@@ -188,6 +188,7 @@ public class ConsoleMain {
                 for (int i = 0; i != results.numRows(); ++i){
                     System.out.println("a_" + i + "= " + results.get(i));
                 }
+                System.out.println("MSE: " + PolynomialRegressionAlgorithm.meanSquaredError(data,results,GLOBAL_POST_OPS));
                 break;
 
             //Exponential Regression
@@ -195,6 +196,7 @@ public class ConsoleMain {
                 SimpleMatrix exponentialResults = ExponentialRegressionAlgorithm.STANDARD.regress(data,GLOBAL_POST_OPS);
                 System.out.println("A = " + exponentialResults.get(0));
                 System.out.println("b = " + exponentialResults.get(1));
+                System.out.println("MSE = " + ExponentialRegressionAlgorithm.meanSquaredError(data, exponentialResults, GLOBAL_POST_OPS));
                 break;
         }
         SimpleMatrix results = PolynomialRegressionAlgorithm.LINEAR.regress(data, PostFunctionOperation.createTruncator(5));

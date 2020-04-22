@@ -53,15 +53,15 @@ public final class IterationCollection implements Iterable<DataSet> {
         //PHASE 2: Write table headers
         DataSet headerBasis = iterations.get(0);
         for (DataSet.VariableData titleData : headerBasis){
-            stringWriter.write(titleData.getVariableString() + "\t");
+            stringWriter.write(String.format("%10s\t", titleData.getVariableString()));
         }
         stringWriter.append('\n');
 
         //PHASE 3: Write table rows
         for (DataSet iter : this){
             for (DataSet.VariableData data : iter){
-                stringWriter.write(data.getValue() + "\t");
-
+                if (data.getVariableString().equals("e") && data.getValue() > 100) continue; //FORMAT FIX
+                stringWriter.write(String.format("%10.5f\t", data.getValue()));
             }
             stringWriter.append('\n');
         }
