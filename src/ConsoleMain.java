@@ -185,6 +185,7 @@ public class ConsoleMain {
                 System.out.println("Degree:");
                 int degree = takeIntChoice();
                 SimpleMatrix results = PolynomialRegressionAlgorithmImpl.fromDegree(degree).regress(data,GLOBAL_POST_OPS);
+                System.out.println("NOTE: The answers may be off because the Gaussian Elimination truncated implementation was used");
                 for (int i = 0; i != results.numRows(); ++i){
                     System.out.println("a_" + i + "= " + results.get(i));
                 }
@@ -194,7 +195,7 @@ public class ConsoleMain {
             //Exponential Regression
             case 2:
                 SimpleMatrix exponentialResults = ExponentialRegressionAlgorithm.STANDARD.regress(data,GLOBAL_POST_OPS);
-                System.out.println("A = " + exponentialResults.get(0));
+                System.out.println("A =  " + exponentialResults.get(0));
                 System.out.println("b = " + exponentialResults.get(1));
                 System.out.println("MSE = " + ExponentialRegressionAlgorithm.meanSquaredError(data, exponentialResults, GLOBAL_POST_OPS));
                 break;
